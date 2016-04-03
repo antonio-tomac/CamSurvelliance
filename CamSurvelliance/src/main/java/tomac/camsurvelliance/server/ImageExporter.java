@@ -12,12 +12,13 @@ import java.util.List;
 import java.util.Random;
 import javax.imageio.ImageIO;
 import tomac.camsurvelliance.comunication.ImageMessage;
+import tomac.camsurvelliance.server.ImageCenter.ChangeListener;
 
 /**
  *
  * @author Antonio Tomac <antonio.tomac@mediatoolkit.com>
  */
-public class ImageExporter implements Runnable {
+public class ImageExporter implements ChangeListener {
 
 	private final ImageCenter imageCenter;
 	private final Random random = new Random();
@@ -26,12 +27,14 @@ public class ImageExporter implements Runnable {
 
 	public ImageExporter(ImageCenter imageCenter, String exportPath) {
 		this.imageCenter = imageCenter;
+		if (!exportPath.endsWith(File.pathSeparator)) {
+			exportPath += File.pathSeparator;
+		}
 		this.exportPath = exportPath;
 	}
 
 	@Override
-	public void run() {
-
+	public void changed() {
 		StringBuilder info = new StringBuilder();
 		List<ImageMessage> images = imageCenter.getLastImages();
 		System.out.println("exporting images... (" + images.size() + ")");
@@ -39,10 +42,10 @@ public class ImageExporter implements Runnable {
 			Date date = new Date(imageMessage.getTimestamp() * 1000);
 			String datePretty = dateFormat.format(date);
 			BufferedImage image = imageMessage.getImage();
-			int id = random.nextInt(Integer.MAX_VALUE);
 			String senderId = imageMessage.getSenderId();
-			String imageName = exportPath + "/image_" + senderId + ".jpg";
-			File file = new File(imageName);
+			String imageName = "image_" + senderId + ".jpg";
+			String fullImageName = exportPath + imageName;
+			File file = new File(fullImageName);
 			try {
 				ImageIO.write(image, "jpg", file);
 			} catch (IOException ex) {

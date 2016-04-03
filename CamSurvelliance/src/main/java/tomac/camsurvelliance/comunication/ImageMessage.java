@@ -39,7 +39,7 @@ public class ImageMessage implements Serializable {
 
 	private void writeObject(ObjectOutputStream out) throws IOException {
 		out.defaultWriteObject();
-		ImageIO.write(image, "png", out);
+		ImageIO.write(image, "jpg", out);
 	}
 
 	private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {

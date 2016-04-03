@@ -2,9 +2,6 @@ package tomac.camsurvelliance.server;
 
 import java.io.IOException;
 import java.net.ServerSocket;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 /**
  *
@@ -19,6 +16,8 @@ public class Server {
 		if (args.length == 1) {
 			exportPath = args[0];
 		}
+		ImageExporter imageExporter = new ImageExporter(imageCenter, exportPath);
+		imageCenter.addChangeListener(imageExporter);
 		System.out.println("openning socket...");
 		ServerSocket serverSocket = new ServerSocket(serverPort);
 		ConnectionsServer connectionsServer = new ConnectionsServer(
@@ -27,9 +26,5 @@ public class Server {
 		System.out.println("listening for connections...");
 		Thread connectionsThread = new Thread(connectionsServer);
 		connectionsThread.start();
-		ImageExporter imageExporter = new ImageExporter(imageCenter, exportPath);
-		ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(1);
-		scheduledExecutorService.scheduleAtFixedRate(imageExporter, 0, 5, TimeUnit.SECONDS);
-		System.out.println("started exporter");
 	}
 }
