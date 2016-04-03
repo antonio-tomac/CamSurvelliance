@@ -5,7 +5,11 @@ import java.io.File;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
+import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import javax.imageio.ImageIO;
 import tomac.camsurvelliance.comunication.ImageMessage;
 import tomac.camsurvelliance.server.Config;
@@ -28,13 +32,20 @@ public class ClientProvider {
 		String serverAddress = Config.DEFAULT_SERVER_ADDRESS;
 		int serverPort = Config.DEFAULT_SERVER_PORT;
 		String senderName = Config.DEFAULT_SENDER_NAME;
+		int socketTimeout = Config.DEFAULT_SOCKET_TIMEOUT;
 		if (args.length == 1) {
 			senderName = args[0];
 		}
+		DateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd. HH:mm");
+		String dirName = "pics/pics_" + dateFormat.format(new Date());
+		File dir = new File(dirName);
+		dir.mkdirs();
 		int i = 0;
 		while (true) {
 			try {
-				Socket socket = new Socket(serverAddress, serverPort);
+				Socket socket = new Socket();
+				socket.setSoTimeout(socketTimeout);
+				socket.connect(new InetSocketAddress(serverAddress, serverPort), socketTimeout);
 				OutputStream outputStream = socket.getOutputStream();
 				ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
 				while (true) {
@@ -46,7 +57,7 @@ public class ClientProvider {
 					objectOutputStream.flush();
 					objectOutputStream.reset();
 
-					File file = new File("image_" + i + ".jpg");
+					File file = new File(dirName + "/image_" + i + ".jpg");
 					ImageIO.write(image, "jpg", file);
 					i++;
 				}

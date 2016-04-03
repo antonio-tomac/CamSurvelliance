@@ -9,20 +9,21 @@ import java.net.Socket;
  * @author Antonio Tomac <antonio.tomac@mediatoolkit.com>
  */
 public class ConnectionsServer implements Runnable {
-
+	
 	private final ImageCenter imageCenter;
 	private final ServerSocket serverSocket;
-
+	
 	public ConnectionsServer(ImageCenter imageCenter, ServerSocket serverSocket) {
 		this.imageCenter = imageCenter;
 		this.serverSocket = serverSocket;
 	}
-
+	
 	@Override
 	public void run() {
 		try {
 			while (true) {
 				Socket socket = serverSocket.accept();
+				socket.setSoTimeout(Config.DEFAULT_SOCKET_TIMEOUT * 10);
 				System.out.println("got connection: " + socket.getInetAddress());
 				ProviderHandler providerHandler = new ProviderHandler(socket, imageCenter);
 				Thread thread = new Thread(providerHandler);
@@ -30,7 +31,7 @@ public class ConnectionsServer implements Runnable {
 				thread.start();
 			}
 		} catch (IOException ex) {
-
+			
 		}
 	}
 }
