@@ -9,7 +9,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.Random;
 import javax.imageio.ImageIO;
 import tomac.camsurvelliance.comunication.ImageMessage;
 import tomac.camsurvelliance.server.ImageCenter.ChangeListener;
@@ -21,14 +20,13 @@ import tomac.camsurvelliance.server.ImageCenter.ChangeListener;
 public class ImageExporter implements ChangeListener {
 
 	private final ImageCenter imageCenter;
-	private final Random random = new Random();
 	private final DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss dd.MM.yyyy.");
 	private final String exportPath;
 
 	public ImageExporter(ImageCenter imageCenter, String exportPath) {
 		this.imageCenter = imageCenter;
-		if (!exportPath.endsWith(File.pathSeparator)) {
-			exportPath += File.pathSeparator;
+		if (!exportPath.endsWith(File.separator)) {
+			exportPath += File.separator;
 		}
 		this.exportPath = exportPath;
 	}
