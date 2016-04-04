@@ -8,7 +8,7 @@ public class Config {
 
 	public static final String DEFAULT_SERVER_ADDRESS = "50.28.32.145";
 	public static final int DEFAULT_SERVER_PORT = 12345;
-	public static final int DEFAULT_SOCKET_TIMEOUT = 1000 * 1;
+	public static final int DEFAULT_SOCKET_TIMEOUT = 1000 * 10;	//10 sec
 	public static final String DEFAULT_SENDER_NAME = "sender";
 	public static final String DEFAULT_EXPORT_PATH = ".";
 }
