@@ -57,7 +57,7 @@ public class ClientProvider {
 					objectOutputStream.flush();
 					objectOutputStream.reset();
 
-					File file = new File(dirName + "/image_" + i + ".jpg");
+					File file = new File(dirName + "/image_" + String.format("%05d", i) + ".jpg");
 					ImageIO.write(image, "jpg", file);
 					i++;
 				}
